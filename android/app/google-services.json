@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "852634201832",
+    "project_id": "prodavnica-instrumenata",
+    "storage_bucket": "prodavnica-instrumenata.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852634201832:android:627ba66f97eb46f7bf635d",
+        "android_client_info": {
+          "package_name": "com.example.prodavnica_muzickih_instrumenata"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbkoLRtTHG0W-eNiUm_RAJg6QFH0WmE3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

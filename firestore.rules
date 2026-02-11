@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Pravila za kolekciju 'instruments'
+    // Instrumenti su javni - svi mogu da čitaju
+    match /instruments/{instrumentId} {
+      allow read: if true; // Svi mogu da čitaju instrumente
+      allow create, update, delete: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
+    
+    // Pravila za kolekciju 'users'
+    match /users/{userId} {
+      // Korisnici mogu da čitaju samo svoje podatke
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // Korisnici mogu da kreiraju svoj nalog
+      allow create: if request.auth != null && request.auth.uid == userId;
+      // Korisnici mogu da ažuriraju samo svoje podatke
+      allow update: if request.auth != null && request.auth.uid == userId;
+      // Samo admin može da briše korisnike
+      allow delete: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Pravila za kolekciju 'orders'
+    match /orders/{orderId} {
+      // Korisnici mogu da čitaju samo svoje porudžbine
+      // Admin može da čita sve porudžbine
+      allow read: if request.auth != null && (
+        resource.data.userId == request.auth.uid ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+      // Korisnici mogu da kreiraju svoje porudžbine
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+      // Samo admin može da ažurira porudžbine (status)
+      allow update: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      // Samo admin može da briše porudžbine
+      allow delete: if request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
