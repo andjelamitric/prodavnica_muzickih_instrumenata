@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'screens/root_screen.dart';
 
-void main() {
+//poziva se prilikom pokretanja aplikacije, INICIJALIZACIJA FIREBASE-A
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -16,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'Prodavnica instrumenata',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
+          seedColor: const Color(0xFFD4A574), // Zlatkasta boja
+          brightness: Brightness.light,
         ),
         useMaterial3: true,
       ),
